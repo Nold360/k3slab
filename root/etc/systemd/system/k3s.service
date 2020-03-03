@@ -1,0 +1,10 @@
+[Unit]
+Description=Start K3S Cluster
+
+[Service]
+WorkingDirectory=/root/
+ExecStart=/bin/bash /usr/local/bin/k3s-bootstrap.sh
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
