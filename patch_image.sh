@@ -28,19 +28,18 @@ mkdir -p $ROOT_MNT/boot $ROOT_MNT/etc/systemd/system/multi-user.target.wants/
 
 # preseed k3s
 echo "Downloading k3s-binary..."
-source boot/k3s.config
+source root/boot/k3s.config
 wget -O $ROOT_MNT/usr/local/bin/k3s "$K3S_URL"
 chmod +x $ROOT_MNT/usr/local/bin/k3s
 
 # copy files
 echo "Copying files to image filesystem..."
 mount "${loopdev}p1" $ROOT_MNT/boot
-cp -v boot/* $ROOT_MNT/boot/
-cp -vr root/* $ROOT_MNT/
+cp -arv root/* $ROOT_MNT/ || true
 
 # Other patches
 # enable k3s service on bootup e.g. `systemctl enable k3s`
-ln -s /etc/systemd/system/k3s.service $ROOT_MNT/etc/systemd/system/multi-user.target.wants/k3s.service
+ln -s /etc/systemd/system/k3s.service $ROOT_MNT/etc/systemd/system/multi-user.target.wants/k3s.service || true
 
 echo "Image '$IMG_FILE' successfully patched!"
 exit 0
